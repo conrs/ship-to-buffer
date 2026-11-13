@@ -1,0 +1,16 @@
+name = "ship-to-buffer"
+main = "src/worker.ts"
+compatibility_date = "2025-10-01"
+
+# public/ is served as static files; /auth/* and /api/* fall through to the Worker.
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+[vars]
+# Not secret. Paste the client ID from https://publish.buffer.com/settings/api (App Clients).
+BUFFER_CLIENT_ID = ""
+
+# Secrets, never in this file:
+#   npx wrangler secret put BUFFER_CLIENT_SECRET
+#   npx wrangler secret put SESSION_SECRET      (openssl rand -base64 48)

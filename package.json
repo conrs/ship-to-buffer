@@ -1,0 +1,22 @@
+{
+  "name": "ship-to-buffer",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Turn a Betacade game link into launch posts for every Buffer channel, then queue or schedule them through the Buffer API.",
+  "scripts": {
+    "test": "node --test test/*.test.*",
+    "dev": "node dev/server.ts",
+    "typecheck": "tsc --noEmit",
+    "deploy": "wrangler deploy"
+  },
+  "engines": {
+    "node": ">=22.18"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20251001.0",
+    "@types/node": "^22.10.0",
+    "typescript": "^5.6.3",
+    "wrangler": "^4.40.0"
+  }
+}

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ship to Buffer</title>
+  <meta name="description" content="Turn a Betacade game link into launch posts for every channel you have in Buffer, then queue or schedule them in one go.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23151a21'/%3E%3Cpath d='M9 20l7-10 7 10z' fill='%2350e3c2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">▲</span>
+      <div>
+        <h1>Ship to Buffer</h1>
+        <p class="tag">Betacade game link in, launch posts out.</p>
+      </div>
+    </div>
+    <div id="account" class="account" aria-live="polite"></div>
+  </header>
+
+  <main>
+    <div id="flash" class="flash" role="status" hidden></div>
+
+    <section class="step" aria-labelledby="s1">
+      <h2 id="s1"><span class="num">1</span> Pick a game</h2>
+      <form id="gameForm" class="row">
+        <label class="sr" for="gameUrl">Betacade game link</label>
+        <input id="gameUrl" type="text" inputmode="url" autocomplete="off" spellcheck="false"
+               placeholder="https://play.betacade.com/g/your-game">
+        <button type="submit" class="btn">Read it</button>
+      </form>
+      <div class="demos">
+        <span class="muted">Or try:</span>
+        <button type="button" class="chip" data-demo="product-theater">Product Theater</button>
+        <button type="button" class="chip" data-demo="business">#Business</button>
+        <button type="button" class="chip" data-demo="slopfeld">Slopfeld</button>
+        <button type="button" class="chip" data-demo="yu-cant-look-away">Yu Can't Look Away</button>
+      </div>
+      <article id="gameCard" class="game" hidden>
+        <img id="gameCover" alt="">
+        <div class="game-body">
+          <h3 id="gameTitle"></h3>
+          <p id="gameDesc"></p>
+          <a id="gameLink" target="_blank" rel="noopener"></a>
+        </div>
+      </article>
+    </section>
+
+    <section class="step" aria-labelledby="s2">
+      <h2 id="s2"><span class="num">2</span> Edit the posts</h2>
+      <div class="toolbar">
+        <label class="switch">
+          <input id="theater" type="checkbox">
+          <span>Product Theater mode</span>
+        </label>
+        <button type="button" id="reroll" class="btn ghost small" hidden>Reroll the hype</button>
+        <span class="muted small" id="channelNote"></span>
+      </div>
+      <div id="drafts" class="drafts"><p class="muted">Pick a game to draft its posts.</p></div>
+    </section>
+
+    <section class="step" aria-labelledby="s3">
+      <h2 id="s3"><span class="num">3</span> Ship it</h2>
+      <fieldset class="modes">
+        <legend class="sr">When</legend>
+        <label><input type="radio" name="mode" value="queue" checked> Add to queue</label>
+        <label><input type="radio" name="mode" value="next"> Next in queue</label>
+        <label><input type="radio" name="mode" value="schedule"> Schedule</label>
+        <label><input type="radio" name="mode" value="now"> Share now</label>
+        <label><input type="radio" name="mode" value="draft"> Save as draft</label>
+        <input id="dueAt" type="datetime-local" aria-label="Publish at" hidden>
+      </fieldset>
+      <button id="ship" class="btn big" disabled>Ship to Buffer</button>
+      <ul id="results" class="results"></ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>Made for <a href="https://buffer.com/api/commit" target="_blank" rel="noopener">Buffer Commit</a> by Matt, with Matt's AI.
+      Games are hosted on <a href="https://betacade.com" target="_blank" rel="noopener">Betacade</a>.
+      Your Buffer tokens stay encrypted on the server, never in this page.</p>
+  </footer>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
