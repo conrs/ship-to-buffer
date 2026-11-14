@@ -107,10 +107,7 @@ async function loadGame(input) {
   }
   state.game = j;
   state.posts = {};
-  try {
-    localStorage.setItem("stb:game", j.slug);
-  } catch {}
-  history.replaceState(null, "", "?game=" + encodeURIComponent(j.slug));
+  history.replaceState(null, "", location.pathname);
   $("gameUrl").value = j.url;
   renderGame();
   renderDrafts();
@@ -453,12 +450,8 @@ if (kept) {
   $("dueAt").hidden = mode() !== "schedule";
   if (kept.dueAt) $("dueAt").value = kept.dueAt;
 }
-let start = params.get("game") || kept?.game;
-if (!start) {
-  try {
-    start = localStorage.getItem("stb:game");
-  } catch {}
-}
+// A fresh open starts empty until a game is picked; only an explicit ?game= link or the trip back from Buffer's sign-in brings one.
+const start = params.get("game") || kept?.game;
 renderAccount();
 loadAccount();
 if (start) loadGame(start);
