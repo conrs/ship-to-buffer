@@ -9,7 +9,7 @@ binding = "ASSETS"
 
 [vars]
 # Not secret. Paste the client ID from https://publish.buffer.com/settings/api (App Clients).
-BUFFER_CLIENT_ID = ""
+BUFFER_CLIENT_ID = "XlW9PtXAC7dPBzAV3uiyTBfYyEzdEHJsy33DU32TfLX"
 
 # Secrets, never in this file:
 #   npx wrangler secret put BUFFER_CLIENT_SECRET

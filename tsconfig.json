@@ -12,5 +12,5 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["src", "dev", "test"]
+  "include": ["src", "dev"]
 }
