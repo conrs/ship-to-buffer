@@ -70,7 +70,7 @@ function renderAccount() {
       el("button", { class: "btn ghost small", type: "button", onclick: signOut, text: "Sign out" }),
     );
   } else {
-    box.append(el("a", { class: "btn buffer", href: "/auth/login", text: "Connect Buffer" }));
+    box.append(el("a", { class: "btn buffer", href: "/auth/login", text: "Connect Buffer", onclick: keep }));
   }
 }
 
@@ -131,15 +131,41 @@ function renderGame() {
   $("gameLink").textContent = g.url.replace(/^https:\/\//, "");
 }
 
+// ---------- connecting keeps your work ----------
+
+// Buffer's sign-in leaves the page, so what was set up (Theater, the reroll, edited drafts, how to ship) rides along in
+// sessionStorage and comes back with it. Edits are kept by network, since preview channels become real ones.
+const KEEP = "stb:pending";
+function keep() {
+  try {
+    const edits = {};
+    for (const c of channels()) {
+      const p = state.posts[c.id];
+      if (p?.edited) edits[c.service] = p.text;
+    }
+    sessionStorage.setItem(KEEP, JSON.stringify({ game: state.game?.slug, theater: state.theater, seed: state.seed, mode: mode(), dueAt: $("dueAt").value, edits }));
+  } catch {}
+}
+function connect() {
+  keep();
+  location.href = "/auth/login";
+}
+let kept = null;
+try {
+  kept = JSON.parse(sessionStorage.getItem(KEEP) || "null");
+  sessionStorage.removeItem(KEEP);
+} catch {}
+
 // ---------- drafts ----------
 
 function postFor(c) {
   if (!state.posts[c.id]) {
+    const mine = kept?.edits?.[c.service];
     state.posts[c.id] = {
       on: usable(c),
-      text: draft(c.service, state.game, { theater: state.theater, seed: state.seed }),
+      text: mine ?? draft(c.service, state.game, { theater: state.theater, seed: state.seed }),
       media: "image",
-      edited: false,
+      edited: mine != null,
     };
   }
   return state.posts[c.id];
@@ -286,7 +312,7 @@ function describe(r, m) {
 async function ship() {
   const btn = $("ship");
   if (btn.dataset.action === "connect") {
-    location.href = "/auth/login";
+    connect();
     return;
   }
   const m = mode();
@@ -401,7 +427,18 @@ if (params.get("connected")) flash("Buffer connected.", "ok");
   const pad = (n) => String(n).padStart(2, "0");
   $("dueAt").value = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
-let start = params.get("game");
+if (kept) {
+  state.theater = !!kept.theater;
+  state.seed = kept.seed || 1;
+  $("theater").checked = state.theater;
+  $("reroll").hidden = !state.theater;
+  document.body.classList.toggle("theater", state.theater);
+  const r = document.querySelector(`input[name="mode"][value="${CSS.escape(kept.mode || "queue")}"]`);
+  if (r) r.checked = true;
+  $("dueAt").hidden = mode() !== "schedule";
+  if (kept.dueAt) $("dueAt").value = kept.dueAt;
+}
+let start = params.get("game") || kept?.game;
 if (!start) {
   try {
     start = localStorage.getItem("stb:game");
