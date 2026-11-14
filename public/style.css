@@ -163,3 +163,7 @@ body.theater .tag::after { content: " Now with synergy."; }
 @media (prefers-reduced-motion: reduce) { body.theater .logo { animation: none; } }
 
 footer { max-width: 860px; margin: 0 auto; padding: 0 16px 40px; color: var(--muted); font-size: 13px; }
+
+.empty-channels { border: 1px solid var(--accent, #6c5ce7); border-radius: 12px; padding: 1rem; margin: 0 0 1rem; }
+.empty-channels p { margin: .4rem 0 .8rem; }
+.empty-channels .row { display: flex; gap: .6rem; flex-wrap: wrap; }

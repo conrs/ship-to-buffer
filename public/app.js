@@ -191,13 +191,23 @@ function renderDrafts() {
   $("channelNote").textContent = state.account
     ? `${list.filter(usable).length} channel(s) from your Buffer`
     : "Previewing. Connect Buffer to post to your own channels.";
+  // Connected, but nothing to post to: say so plainly and send them to set one up, before anything else.
+  if (state.account && !list.some(usable)) {
+    box.append(
+      el("div", { class: "empty-channels" },
+        el("strong", { text: list.length ? "None of your Buffer channels can post right now." : "Your Buffer has no channels yet." }),
+        el("p", { text: "Connect X, Bluesky, LinkedIn or Threads in Buffer (Channels, then Connect a channel), then come back and check again. Your game and drafts stay here." }),
+        el("div", { class: "row" },
+          el("a", { class: "btn buffer", href: "https://publish.buffer.com/", target: "_blank", rel: "noopener", text: "Set up channels in Buffer" }),
+          el("button", { type: "button", class: "btn ghost", text: "Check again", onclick: async () => { await loadAccount(); renderDrafts(); } }),
+        ),
+      ),
+    );
+  }
   if (!state.game) {
     box.append(el("p", { class: "muted", text: "Pick a game to draft its posts." }));
     updateShip();
     return;
-  }
-  if (state.account && !list.length) {
-    box.append(el("p", { class: "muted", text: "No channels in this Buffer account yet. Connect one in Buffer, then reload." }));
   }
   for (const c of list) {
     if (!usable(c)) {
@@ -296,6 +306,11 @@ function updateShip() {
     return;
   }
   btn.dataset.action = "ship";
+  if (!channels().some(usable)) {
+    btn.textContent = "Set up a channel in Buffer first";
+    btn.disabled = true;
+    return;
+  }
   const verb = { queue: "Queue", next: "Queue next", schedule: "Schedule", now: "Share now", draft: "Save drafts" }[mode()];
   btn.textContent = picks.length ? `${verb} on ${picks.length} channel${picks.length > 1 ? "s" : ""}` : "Pick a channel";
   btn.disabled = !state.game || !picks.length || over;
