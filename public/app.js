@@ -196,9 +196,9 @@ function renderDrafts() {
     box.append(
       el("div", { class: "empty-channels" },
         el("strong", { text: list.length ? "None of your Buffer channels can post right now." : "Your Buffer has no channels yet." }),
-        el("p", { text: "Connect X, Bluesky, LinkedIn or Threads in Buffer (Channels, then Connect a channel), then come back and check again. Your game and drafts stay here." }),
+        el("p", { text: "Connect X, Bluesky, LinkedIn or Threads in Buffer, then come back and check again. Your game and drafts stay here." }),
         el("div", { class: "row" },
-          el("a", { class: "btn buffer", href: "https://publish.buffer.com/", target: "_blank", rel: "noopener", text: "Set up channels in Buffer" }),
+          el("a", { class: "btn buffer", href: "https://publish.buffer.com/channels/connect", target: "_blank", rel: "noopener", text: "Set up channels in Buffer" }),
           el("button", { type: "button", class: "btn ghost", text: "Check again", onclick: async () => { await loadAccount(); renderDrafts(); } }),
         ),
       ),
